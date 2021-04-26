@@ -366,7 +366,12 @@ def isoTime(t):
     return time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime(t))
 
 def iso2Epoch(ts):
-     p = '%Y-%m-%dT%H:%M:%S.%fZ'
+     # Handle both 1970-01-01T00:00:00.000Z and 1970-01-01T00:00:00Z (no microsecond)
+     p = '%Y-%m-%dT%H:%M:%S' + ('.%fZ' if '.' in ts else 'Z')
+     #if '.' in ts:
+     #    p += '.%fZ'
+     #else:
+     #    p += 'Z'
      epoch = datetime(1970, 1, 1)
      time = (datetime.strptime(ts, p) - epoch).total_seconds()
      return time
